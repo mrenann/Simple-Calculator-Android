@@ -74,21 +74,19 @@ class MainActivity : AppCompatActivity() {
         return expression
     }
 
-    private fun showResult() {
-        try {
-            val expression = getInputExpression()
-            val result = Expression(expression).calculate()
-            if (result.isNaN()) {
-                binding.tvResultado.text = getString(R.string.error_msg)
-                binding.tvResultado.setTextColor(ContextCompat.getColor(this, R.color.redColor))
-            } else {
-                binding.tvResultado.text = DecimalFormat("0.######").format(result).toString()
-                binding.tvResultado.setTextColor(ContextCompat.getColor(this, R.color.greenColor))
-            }
-        } catch (e: Exception) {
-            binding.tvResultado.text = getString(R.string.error_msg)
-            binding.tvResultado.setTextColor(ContextCompat.getColor(this, R.color.redColor))
-        }
+    private fun showResult() = try {
+        val expression = getInputExpression()
+        val result = Expression(expression).calculate()
+        if (result.isNaN()) {
+            outputMessage(getString(R.string.error_msg),R.color.redColor)
+        } else outputMessage(DecimalFormat("0.######").format(result).toString(),R.color.greenColor)
+    } catch (e: Exception) {
+        outputMessage(getString(R.string.error_msg),R.color.redColor)
+    }
+
+    private fun outputMessage(value: String, color: Int) {
+        binding.tvResultado.text = value
+        binding.tvResultado.setTextColor(ContextCompat.getColor(this, color))
     }
 
 }
